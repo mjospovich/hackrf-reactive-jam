@@ -1,0 +1,7 @@
+# HackRF Reactive Jammer - Python Dependencies
+# ============================================
+# Note: GNU Radio, gr-osmosdr, and HackRF tools must be installed
+# separately via your system package manager (apt, brew, etc.)
+
+numpy>=1.20.0
+PyYAML>=6.0
