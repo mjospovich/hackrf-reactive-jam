@@ -1,0 +1,23 @@
+# The options below are applicable to all jammer types
+# Select Frequency operating range (1=2.4GHz, 2=5GHz) | default = 1
+band: 1
+# Select Jammer Type (1=constant, 2=sweeping, 3=random channel hopping) | default = 1
+jammer: 1  # Change to 2 for sweeping across 2.4GHz channels
+# Select Type of Jamming (1=proactive, 2=reactive) | default = 1
+jamming: 2  # This enables reactive mode
+# Select Jamming waveform (1=single tone, 2=swept sine, 3=gaussian noise) | default = 3
+waveform: 3
+# Enter Jammer transmit power in dBm (Min = -40dBm, Max = 13dBm) | default = 6dBm
+power: 6
+# Enter channel jamming duration in sec | default = 10s
+t_jamming: 30
+
+# The options below are optional depending on the jammer of choice
+# Enter total runtime duration in sec | default = 200s
+duration: 200  # This option doesn't apply to constant jammer
+# Enter distance between adjacent channels in MHz (Min = 1MHz, Max = 20MHz) | default = 20MHz
+ch_dist: 20  # This option doesn't apply to constant jammer and 5GHz band
+# Enter the frequency to Jam in MHz | default = 2462MHz
+freq: 2462  # This option only applies to constant jammer; e.g., channel 11 in 2.4GHz
+#Select channel allocation (1=UNII-1, 2=UNII-2a, 3=UNII-2c, 4=UNII-3)
+allocation: 1  # This option only applies to 5GHz band

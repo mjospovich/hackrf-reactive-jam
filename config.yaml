@@ -1,0 +1,128 @@
+# =============================================================================
+# FAST REACTIVE JAMMER - Configuration File
+# =============================================================================
+#
+# Target: DJI Mini 2 SE (OcuSync 2.0, 2.4GHz band)
+# Hardware: 2x HackRF One
+#
+# If this file is missing, the script will use hardcoded defaults.
+# All values shown here ARE the defaults.
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# DEVICE ASSIGNMENT
+# -----------------------------------------------------------------------------
+# HackRF device identifiers. Use index-based ("hackrf=0") or serial number.
+# To find serial numbers, run: hackrf_info
+#
+# RX = Receiver (spectrum monitor) - continuously sweeps and detects
+# TX = Transmitter (jammer) - activates when activity is detected
+
+rx_device: "hackrf=0"
+tx_device: "hackrf=1"
+
+# -----------------------------------------------------------------------------
+# FREQUENCY BAND
+# -----------------------------------------------------------------------------
+# DJI Mini 2 SE operates on 2.400 - 2.4835 GHz (2.4GHz ISM band)
+# Values in MHz
+
+freq_min: 2400          # Start of band (MHz)
+freq_max: 2483.5        # End of band (MHz)
+
+# -----------------------------------------------------------------------------
+# HACKRF SETTINGS  
+# -----------------------------------------------------------------------------
+# Sample rate and bandwidth determine instantaneous spectrum coverage
+# HackRF can do up to 20 MHz - we use max for widest coverage per sweep step
+
+sample_rate: 20         # Sample rate in MHz (max 20 for HackRF)
+bandwidth: 20           # RF bandwidth in MHz
+
+# FFT size for spectrum analysis
+# Smaller = faster processing, less frequency resolution
+# Larger = slower processing, better frequency resolution
+# Recommended: 256-1024 (512 is good balance)
+
+fft_size: 512
+
+# -----------------------------------------------------------------------------
+# SWEEP CONFIGURATION
+# -----------------------------------------------------------------------------
+# Center frequencies for each sweep step (in MHz)
+# With 20MHz bandwidth, each step covers ±10MHz around center
+# 5 steps with slight overlap covers the full ~84MHz band
+#
+# Step 1: 2410 MHz covers 2400-2420 MHz
+# Step 2: 2430 MHz covers 2420-2440 MHz
+# Step 3: 2450 MHz covers 2440-2460 MHz
+# Step 4: 2470 MHz covers 2460-2480 MHz
+# Step 5: 2490 MHz covers 2480-2500 MHz (partial, band ends at 2483.5)
+
+sweep_freqs:
+  - 2410
+  - 2430
+  - 2450
+  - 2470
+  - 2490
+
+# -----------------------------------------------------------------------------
+# TIMING (CRITICAL FOR PERFORMANCE)
+# -----------------------------------------------------------------------------
+# These values directly affect response speed vs detection accuracy
+#
+# rx_dwell_time: How long to stay on each frequency during sweep (seconds)
+#   - Shorter = faster full sweep, but less time to detect weak signals
+#   - Longer = slower sweep, but better detection of weak/intermittent signals
+#   - 8ms x 5 freqs = 40ms full band sweep
+#
+# tx_jam_duration: Minimum time to jam when activity detected (seconds)
+#   - Shorter = more agile, can follow fast hops
+#   - Longer = more disruption per activation, but slower to follow hops
+#
+# tx_holdoff: Delay after jamming before re-enabling detection (seconds)
+#   - Prevents detecting our own jamming signal (self-interference)
+#   - Keep short for fast response
+
+rx_dwell_time: 0.008    # 8ms per frequency (40ms full sweep)
+tx_jam_duration: 0.015  # 15ms minimum jam burst
+tx_holdoff: 0.002       # 2ms holdoff after jam
+
+# -----------------------------------------------------------------------------
+# DETECTION SETTINGS
+# -----------------------------------------------------------------------------
+# threshold_margin_db: How many dB above noise floor to trigger detection
+#   - Lower = more sensitive, but more false positives from noise spikes
+#   - Higher = fewer false positives, but might miss weak signals
+#   - Recommended: 6-10 dB
+#
+# calibration_samples: Number of samples to collect during noise floor calibration
+#   - More samples = more accurate noise floor measurement
+#   - Calibration happens once at startup (with drone OFF)
+
+threshold_margin_db: 8
+calibration_samples: 50
+
+# -----------------------------------------------------------------------------
+# TRANSMITTER POWER
+# -----------------------------------------------------------------------------
+# TX power in dBm
+# HackRF typical range: -10 to +10 dBm (depends on frequency and gains)
+#
+# Higher = more effective jamming, but:
+#   - More power consumption
+#   - More heat
+#   - Could affect other equipment in lab
+#
+# For lab testing, 10 dBm is usually sufficient at close range
+
+tx_power_dbm: 10
+
+# -----------------------------------------------------------------------------
+# RUNTIME
+# -----------------------------------------------------------------------------
+# Total duration to run in seconds
+# Set to 0 for unlimited (run until Ctrl+C)
+
+duration: 300           # 5 minutes default

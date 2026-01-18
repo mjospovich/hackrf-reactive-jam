@@ -1,0 +1,99 @@
+# Reactive Jammer Configuration for DJI Mini 2 SE
+# 2.4GHz Band - Dual HackRF Setup
+
+# ==============================================================================
+# DEVICE CONFIGURATION
+# ==============================================================================
+
+# HackRF device identifiers
+# Use "hackrf=0" and "hackrf=1" for index-based selection
+# Or use serial numbers like "hackrf=0000000000000001" for specific devices
+# To find serial numbers, run: hackrf_info
+
+rx_device: "hackrf=0"   # Receiver - spectrum monitor
+tx_device: "hackrf=1"   # Transmitter - jammer
+
+# ==============================================================================
+# FREQUENCY SETTINGS
+# ==============================================================================
+
+# DJI Mini 2 SE operates on 2.400-2.4835 GHz (2.4GHz band)
+# Center frequency in MHz
+center_freq: 2440       # Center of 2.4GHz band
+
+# Sample rate in MHz (determines instantaneous bandwidth)
+sample_rate: 20         # 20 MHz covers good portion of band
+
+# RF bandwidth in MHz
+bandwidth: 20
+
+# For wideband sweeping mode (--wideband flag)
+freq_start: 2400        # Start of sweep range (MHz)
+freq_end: 2483.5        # End of sweep range (MHz)
+freq_step: 20           # Step size (MHz)
+
+# ==============================================================================
+# DETECTION SETTINGS
+# ==============================================================================
+
+# FFT size for spectrum analysis (power of 2)
+fft_size: 1024
+
+# Detection interval in seconds (how often to check spectrum)
+detection_interval: 0.02    # 20ms - fast enough for reactive response
+
+# Noise floor calibration time (seconds)
+calibration_time: 3.0
+
+# Detection threshold: dB above measured noise floor
+# Lower = more sensitive (more false positives)
+# Higher = less sensitive (might miss weak signals)
+threshold_margin_db: 6
+
+# ==============================================================================
+# JAMMER SETTINGS
+# ==============================================================================
+
+# Transmit power in dBm
+# HackRF range: approximately -40 to +10 dBm
+# Higher power = more effective jamming but more interference
+tx_power: 10
+
+# Waveform type:
+#   1 = Single tone (narrowband, less effective for FHSS)
+#   2 = Chirp/Swept sine (better for FHSS)
+#   3 = Gaussian noise (wideband, most effective for jamming)
+waveform: 3
+
+# Minimum jamming duration per trigger (seconds)
+# Keeps jammer on for at least this long after detection
+jam_duration: 0.1
+
+# ==============================================================================
+# TIMING
+# ==============================================================================
+
+# Total runtime in seconds
+duration: 300
+
+# ==============================================================================
+# NOTES FOR DJI MINI 2 SE
+# ==============================================================================
+#
+# The DJI Mini 2 SE uses OcuSync 2.0 which:
+# - Operates on 2.4 GHz (2.400-2.4835 GHz)
+# - Uses frequency hopping spread spectrum (FHSS)
+# - Hops across multiple channels to avoid interference
+#
+# For effective jamming:
+# 1. Use wideband mode (--wideband) to sweep across the band
+# 2. Use Gaussian noise waveform (waveform: 3) for best coverage
+# 3. Higher power is more effective but check your equipment limits
+# 4. Place the jammer antenna between drone and controller
+#
+# Channel reference for 2.4 GHz:
+#   Channel 1:  2412 MHz
+#   Channel 6:  2437 MHz
+#   Channel 11: 2462 MHz
+#   Channel 13: 2472 MHz
+#   Channel 14: 2484 MHz (Japan only)
