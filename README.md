@@ -265,26 +265,56 @@ Press `Ctrl+C` to stop. Session statistics will be displayed.
 
 ## Physical Setup
 
-*Section to be completed with hardware photos.*
+### Lab Configuration
 
-<!-- TODO: Add photos of:
-- Dual HackRF setup with antennas
-- USB hub configuration
-- Complete lab setup with drone
--->
+![Lab Setup](assets/setup.jpg)
+
+*Complete lab setup: Dual HackRF One SDRs (left and right), laptop running DragonOS with the reactive jammer, and DJI Mini 2 SE controller for monitoring signal status.*
+
+**Hardware Components:**
+- 2× HackRF One SDRs with 2.4GHz antennas
+- USB 3.0 hub (recommended for stable data transfer)
+- Laptop running DragonOS (Ubuntu-based SDR distribution)
+- DJI Mini 2 SE drone + controller (target device)
+
+### Spectrum Analysis
+
+![Spectrum Waterfall](assets/ca096a3d-3bb0-410f-93ec-f98079e839ff.JPG)
+
+*Spectrum analyzer waterfall display showing DJI OcuSync 2.0 FHSS hopping pattern in the 2.4GHz ISM band. The horizontal striping pattern reveals the frequency-hopping behavior that the reactive jammer tracks and disrupts.*
 
 ---
 
 ## Testing on DJI Mini 2 SE
 
-*Section to be completed with test results and demonstration.*
+### Results: Signal Degradation Under Jamming
 
-<!-- TODO: Add:
-- Video/GIF of jammer in action
-- Screenshots of drone controller showing signal loss
-- Range and effectiveness measurements
-- Before/after comparison
--->
+The DJI Fly app's Transmission tab provides real-time signal quality metrics. Below are captures during active jamming:
+
+| Normal Operation | Under Jamming |
+|------------------|---------------|
+| Signal: -50 to -60 dBm | Signal: -70 to -80 dBm |
+| Status: Stable | Status: Unstable |
+| Full control | Degraded/lost control |
+
+### Jamming Effect on 2444-2464 MHz Band
+
+![Jammed Signal Graph 1](assets/jammed_graph_1.jpg)
+
+*DJI controller showing signal degradation at -70.4 dBm in the 2444.5-2464.5 MHz range. Note the "Unstable" indicator and degraded video feed (left side). The downlink quality bar shows yellow/red status.*
+
+### Jamming Effect on 2457-2477 MHz Band
+
+![Jammed Signal Graph 2](assets/jammed_graph_2.jpg)
+
+*Controller displaying -76.8 dBm signal strength in the 2457.5-2477.5 MHz band. The reactive jammer successfully tracked the frequency hop and maintained disruption across the new band.*
+
+### Observed Effects
+
+- **Video Feed:** Degraded quality, artifacts, freezing, or complete loss
+- **Control Latency:** Increased from ~50ms to 200ms+ before disconnect
+- **RTH Trigger:** Drone initiates Return-to-Home when signal quality drops below threshold
+- **Effective Range:** Jamming effective within ~10-15m in lab environment (depends on TX power and antenna gain)
 
 ---
 
